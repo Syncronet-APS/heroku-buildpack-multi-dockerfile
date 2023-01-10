@@ -8,23 +8,23 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-PROCFILE=$(cat "${ENV_DIR}/PROCFILE")
+DOCKERFILE=$(cat "${ENV_DIR}/DOCKERFILE")
 
-if [[ -z "${PROCFILE}" ]]; then
-    echo "PROCFILE was not set. Aborting" | indent
+if [[ -z "${DOCKERFILE}" ]]; then
+    echo "DOCKERFILE was not set. Aborting" | indent
     exit 1
 fi
 
-cp "${BUILD_DIR}/${PROCFILE}" "${BUILD_DIR}/Procfile"
+cp "${BUILD_DIR}/${DOCKERFILE}" "${BUILD_DIR}/Dockerfile"
 
 if ! [ $? ]; then
-    echo "FAILED to copy a Procfile" | indent
+    echo "FAILED to copy a Dockerfile" | indent
     exit 1
 fi
 
-echo "Copied ${PROCFILE} as Procfile successfully" | indent
+echo "Copied ${DOCKERFILE} as Dockerfile successfully" | indent
 
-APP_DIR=$(dirname "${BUILD_DIR}/${PROCFILE}")
+APP_DIR=$(dirname "${BUILD_DIR}/${DOCKERFILE}")
 
 if [[ -f "${APP_DIR}/app.json" ]]; then
     cp "${APP_DIR}/app.json" "${BUILD_DIR}/app.json"
