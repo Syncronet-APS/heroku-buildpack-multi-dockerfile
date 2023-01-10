@@ -8,23 +8,25 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
-DOCKERFILE=$(cat "${ENV_DIR}/DOCKERFILE")
+BUILD_CONTEXT=$(cat "${ENV_DIR}/BUILD_CONTEXT")
 
-if [[ -z "${DOCKERFILE}" ]]; then
-    echo "DOCKERFILE was not set. Aborting" | indent
+if [[ -z "${BUILD_CONTEXT}" ]]; then
+    echo "BUILD_CONTEXT was not set. Aborting" | indent
     exit 1
 fi
 
-cp "${BUILD_DIR}/${DOCKERFILE}" "${BUILD_DIR}/Dockerfile"
+cp "${BUILD_DIR}/${BUILD_CONTEXT}/Dockerfile" "${BUILD_DIR}/Dockerfile"
+cp "${BUILD_DIR}/${BUILD_CONTEXT}/Heroku.yml" "${BUILD_DIR}/Heroku.yml"
 
 if ! [ $? ]; then
     echo "FAILED to copy a Dockerfile" | indent
     exit 1
 fi
 
-echo "Copied ${DOCKERFILE} as Dockerfile successfully" | indent
+echo "Copied ${BUILD_CONTEXT} as Dockerfile successfully" | indent
+echo "Copied ${BUILD_CONTEXT} as Heroku.yml successfully" | indent
 
-APP_DIR=$(dirname "${BUILD_DIR}/${DOCKERFILE}")
+APP_DIR=$(dirname "${BUILD_DIR}/${BUILD_CONTEXT}")
 
 if [[ -f "${APP_DIR}/app.json" ]]; then
     cp "${APP_DIR}/app.json" "${BUILD_DIR}/app.json"
